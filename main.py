@@ -30,7 +30,7 @@ class Conversation:
 class AIClient:
     def __init__(self, api_key: str):
         self.api_key = api_key
-        self.base_url = "https://api.rimunace.xyz/v1/chat/completions"
+        self.base_url = "https://openrouter.ai/api/v1/chat/completions"
         self.timeout = 15
 
     async def get_response(self, conversation: Conversation, prompt: str) -> Optional[str]:
@@ -42,7 +42,7 @@ class AIClient:
         }
 
         payload = {
-            "model": "gpt-4o-mini",
+            "model": "deepseek/deepseek-chat-v3-0324:free",
             "messages": conversation.get_context(),
         }
 
