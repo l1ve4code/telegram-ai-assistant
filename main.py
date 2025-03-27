@@ -88,25 +88,25 @@ class AIAssistant:
 
     async def stop_bot(self, event, *_):
         self.is_active = False
-        await event.reply("assistant: 🛑 Бот остановлен. Отправьте /start чтобы возобновить.")
+        return await event.reply("assistant: 🛑 Бот остановлен. Отправьте /start чтобы возобновить.")
 
     async def start_bot(self, event, *_):
         self.is_active = True
         status = f"с {self.target_user.first_name}" if self.target_user else "без активного диалога"
-        await event.reply(f"assistant: ✅ Бот запущен ({status}). Отправьте /stop чтобы остановить.")
+        return await event.reply(f"assistant: ✅ Бот запущен ({status}). Отправьте /stop чтобы остановить.")
 
     async def change_user(self, event, username):
         try:
             new_user = await self.client.get_entity(username)
             self.target_user = new_user
             self.dialog.clear()
-            await event.reply(f"assistant: 🔄 Теперь общаюсь с {new_user.first_name}")
+            return await event.reply(f"assistant: 🔄 Теперь общаюсь с {new_user.first_name}")
         except Exception as e:
-            await event.reply(f"assistant: ❌ Ошибка: {str(e)}")
+            return await event.reply(f"assistant: ❌ Ошибка: {str(e)}")
 
     async def clear_history(self, event, *_):
         self.dialog.clear()
-        await event.reply("assistant: 🗑️ История диалога очищена")
+        return await event.reply("assistant: 🗑️ История диалога очищена")
 
     async def handle_message(self, event):
         print(f"Message from {self.target_user.first_name}: {event.text}")
