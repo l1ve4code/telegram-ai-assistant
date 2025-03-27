@@ -106,7 +106,7 @@ class AIAssistant:
 
             async with self.client.action(self.target_user, 'typing'):
                 await asyncio.sleep(max(1, min(3, len(response) // 20)))
-                await event.reply(f"assistant: {response}")
+                await event.reply(response)
         except Exception as e:
             print(f"Error: {str(e)}")
             await event.reply("assistant: ⚠️ Произошла ошибка, попробуйте позже")
@@ -146,7 +146,7 @@ class AIClient:
 if __name__ == "__main__":
     bot = AIAssistant()
     try:
-        asyncio.run(bot.run())
+        bot.client.loop.run_until_complete(bot.run())
     except KeyboardInterrupt:
         print("\nBot stopped")
     except Exception as e:
