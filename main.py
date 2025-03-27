@@ -63,28 +63,28 @@ class AIAssistant:
 
     async def handle_command(self, event):
         text = event.text.strip()
-        for pattern, action in self.commands.items():
-            if match := re.match(pattern, text, re.IGNORECASE):
-                reply_msg = await action(event, *match.groups())
+        if text.startswith("/"):
+            for pattern, action in self.commands.items():
+                if match := re.match(pattern, text, re.IGNORECASE):
+                    reply_msg = await action(event, *match.groups())
 
-                await asyncio.sleep(1)
-                await event.delete()
+                    await asyncio.sleep(1)
+                    await event.delete()
 
-                if reply_msg:
                     await asyncio.sleep(10)
                     await reply_msg.delete()
 
-                return
+                    return
 
-        reply_msg = await event.reply("assistant: ❌ Неизвестная команда. Доступные команды:\n"
-                                      "/stop - остановить бота\n"
-                                      "/start - запустить бота\n"
-                                      "/set_user @username - изменить пользователя\n"
-                                      "/clear - очистить историю")
-        await asyncio.sleep(1)
-        await event.delete()
-        await asyncio.sleep(10)
-        await reply_msg.delete()
+            reply_msg = await event.reply("assistant: ❌ Неизвестная команда. Доступные команды:\n"
+                                          "/stop - остановить бота\n"
+                                          "/start - запустить бота\n"
+                                          "/set_user @username - изменить пользователя\n"
+                                          "/clear - очистить историю")
+            await asyncio.sleep(1)
+            await event.delete()
+            await asyncio.sleep(10)
+            await reply_msg.delete()
 
     async def stop_bot(self, event, *_):
         self.is_active = False
