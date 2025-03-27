@@ -9,7 +9,6 @@ from typing import List, Dict, Optional
 API_ID = int(os.getenv("API_ID"))
 API_HASH = os.getenv("API_HASH")
 AI_API_KEY = os.getenv("AI_API_KEY")
-TARGET_USER = os.getenv("TARGET_USER")
 FAVORITE_CHAT = "me"
 MAX_HISTORY = 10
 
@@ -50,12 +49,6 @@ class AIAssistant:
     async def run(self):
         await self.client.start()
         print("Bot started")
-
-        try:
-            self.target_user = await self.client.get_entity(TARGET_USER)
-        except Exception as e:
-            print(f"Error: {str(e)}")
-            self.target_user = None
 
         @self.client.on(events.NewMessage(chats=FAVORITE_CHAT))
         async def command_handler(event):

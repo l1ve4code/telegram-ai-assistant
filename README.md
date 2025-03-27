@@ -39,7 +39,6 @@ services:
       - API_ID=YOUR_API_ID
       - API_HASH=YOUR_API_HASH
       - AI_API_KEY=YOUR_AI_API_KEY
-      - TARGET_USER=YOUR_TARGET_USER
     restart: unless-stopped
 ```
 
