@@ -33,8 +33,6 @@ services:
   telegram-ai-bot:
     build: .
     container_name: telegram-ai-bot
-    volumes:
-      - ./data:/app/data
     environment:
       - API_ID=YOUR_API_ID
       - API_HASH=YOUR_API_HASH

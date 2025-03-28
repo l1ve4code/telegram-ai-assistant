@@ -136,8 +136,6 @@ class AIAssistant:
         return await event.reply("assistant: 🗑️ История диалога очищена")
 
     async def handle_message(self, event):
-        print(f"Message from {self.target_user.first_name}: {event.text}")
-
         user_id = event.sender_id
 
         if await self.is_spam(user_id):
