@@ -74,24 +74,27 @@ python main.py
 
 ## How It Works
 
-1. **Initialization**:
-   - Authenticates with Telegram using your API credentials.
-   - Establishes connection with the target user specified in `TARGET_USER`.
+### Main commands (send it to **Saved Messages**)
 
-2. **Message Processing**:
-   - Maintains conversation history (last 10 messages by default).
-   - Sends conversation context + new message to Rimunace AI API.
-   - Returns AI-generated response to the user.
+| Command               | Description                     |
+|-----------------------|---------------------------------|
+| `/start`              | Activate bot                    |
+| `/stop`               | Stop bot                        |
+| `/set_user @username` | Change the conversation partner |
+| `/clear`              | Clear the dialog history        |
 
-3. **Context Management**:
-   - Preserves conversation flow using message history.
-   - Clear history anytime with `/clear` command
-   - Adjustable history depth via `MAX_HISTORY` variable
+### Automatic deletion of messages
+- Your commands will delete after **1 second**
+- The bot's responses are deleted after **10 seconds**
 
-4. **Error Handling**:
-   - Automatic reconnection on network issues
-   - Graceful error recovery with user notifications
-   - Detailed error logging in console
+### Simple communication
+1. Activate bot using command `/start`
+2. Write to any user (who added the bot to the contacts)
+3. The bot will respond based on the context of the conversation
+
+### Work features
+- Communication context saves **last 10 messages**
+- The context is reset after restarting the bot
 
 ## Author
 
