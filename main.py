@@ -2,6 +2,7 @@ import os
 import asyncio
 import re
 import requests
+from datetime import datetime
 from telethon.sync import TelegramClient
 from telethon import events
 from typing import List, Dict, Optional
@@ -39,6 +40,9 @@ class AIAssistant:
         self.dialog = DialogManager()
         self.is_active = True
         self.target_user = None
+        self.user_cooldowns = {}
+        self.spam_threshold = 3
+        self.cooldown_time = 10
         self.commands = {
             r'\/stop': self.stop_bot,
             r'\/start': self.start_bot,
@@ -60,6 +64,29 @@ class AIAssistant:
                 await self.handle_message(event)
 
         await self.client.run_until_disconnected()
+
+    async def is_spam(self, user_id: int) -> bool:
+        now = datetime.now()
+
+        if user_id not in self.user_cooldowns:
+            self.user_cooldowns[user_id] = {
+                'count': 1,
+                'last_message': now
+            }
+            return False
+
+        user_data = self.user_cooldowns[user_id]
+        time_diff = (now - user_data['last_message']).total_seconds()
+
+        if time_diff < self.cooldown_time:
+            user_data['count'] += 1
+            if user_data['count'] >= self.spam_threshold:
+                return True
+        else:
+            user_data['count'] = 1
+
+        user_data['last_message'] = now
+        return False
 
     async def handle_command(self, event):
         text = event.text.strip()
@@ -110,6 +137,14 @@ class AIAssistant:
 
     async def handle_message(self, event):
         print(f"Message from {self.target_user.first_name}: {event.text}")
+
+        user_id = event.sender_id
+
+        if await self.is_spam(user_id):
+            print(f"Обнаружен спам от {user_id}")
+            await event.reply("assistant: ⏳ Пожалуйста, не спамьте. Подождите 10 секунд.")
+            await asyncio.sleep(5)
+            return
 
         try:
             response = await self.ai.get_response(self.dialog, event.text)
